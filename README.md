@@ -9,3 +9,8 @@ node case one.js
 ```
 node case two.js
 ```
+
+### for case three 
+```
+node case three.js
+```
