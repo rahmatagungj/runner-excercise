@@ -1,7 +1,7 @@
 module.exports = class Runner {
   constructor() {
     this.status = 'stopped'
-    this.prevFuntion = undefined
+    this.prevFunction = undefined
   }
 
   /**
@@ -9,9 +9,11 @@ module.exports = class Runner {
    * @param {Function} _function function to be executed, ex: arrow function and function
    * @returns any from this Runner
    */
-  initialize (_function) {
+  initialize(_function) {
+    if (typeof _function !== 'function') throw new Error('Runner must be initialized with a function')
+    
     this._function = _function
-
+    
     return this
   }
 
@@ -21,20 +23,14 @@ module.exports = class Runner {
    * @returns any from this Runner
    */
   run() {
-    if (this.status === 'stopped' && this._function !== this.prevFuntion) {
-      this.#setStatus('running')
+    if (this.status !== 'stopped' &&  this._function === this.prevFunction) throw new Error('Runner is already running');
+    
+    this.#setStatus('running')
+    
+    this._function()
 
-      if (typeof this._function === 'function') {
-        this._function()
-      } else {
-        this._function
-      }
-
-      this.#setStatus('stopped')
-      this.prevFuntion = this._function
-    } else {
-      throw new Error('Runner is already running')
-    }
+    this.#setStatus('stopped')
+    this.prevFunction = this._function
     
     return this
   }
@@ -45,10 +41,6 @@ module.exports = class Runner {
    * @returns any from this Runner
    */
   getStatus() {
-    if (this._function === undefined) {
-      throw new Error('Runner is not initialized')
-    }
-
     return this.status
   }
 
@@ -70,7 +62,7 @@ module.exports = class Runner {
    */
   reset() {
     this.status = 'stopped'
-    this.prevFuntion = undefined
+    this.prevFunction = undefined
 
     return this
   }
