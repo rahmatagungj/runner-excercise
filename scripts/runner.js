@@ -45,6 +45,10 @@ module.exports = class Runner {
    * @returns any from this Runner
    */
   getStatus() {
+    if (this._function === undefined) {
+      throw new Error('Runner is not initialized')
+    }
+
     return this.status
   }
 
